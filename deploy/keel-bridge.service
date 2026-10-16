@@ -1,0 +1,29 @@
+# keel-bridge: one pass of the GitHub <-> git.pop.coop bridge.
+# The process starts as root to read the token files (root only, 0600),
+# then changes to the user keel-bridge before it opens a connection.
+[Unit]
+Description=keel-bridge: sync issues and pull requests (GitHub <-> git.pop.coop)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/keel-bridge/bin/keel-bridge -c /etc/keel-bridge/bridge.ini run
+TimeoutStartSec=15min
+NoNewPrivileges=yes
+CapabilityBoundingSet=CAP_SETUID CAP_SETGID
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/lib/keel-bridge
+PrivateTmp=yes
+PrivateDevices=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictSUIDSGID=yes
+LockPersonality=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+SystemCallFilter=@system-service
+SystemCallArchitectures=native
+MemoryMax=256M
+UMask=0077

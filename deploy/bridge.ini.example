@@ -1,0 +1,26 @@
+# /etc/keel-bridge/bridge.ini (root:root 0600)
+[bridge]
+user = keel-bridge
+db = /var/lib/keel-bridge/state.db
+workdir = /var/lib/keel-bridge/git
+# One repository per line. Lines that start with # are ignored.
+repos = @/etc/keel-bridge/repos
+# Items made before this time are not copied (except by "backfill").
+start = 2026-10-16T12:00:00Z
+max_creates = 30
+merge_grace_minutes = 15
+
+[forgejo]
+url = https://git.pop.coop
+org = Keel-Linux
+bot = keel-bridge
+token_file = /etc/keel-bridge/forgejo-token
+
+[github]
+org = Keel-Linux
+# The GitHub App (preferred):
+app_id_file = /etc/keel-bridge/github-app-id
+key_file = /etc/keel-bridge/github-app.pem
+# Or a fine-grained token (issues and pull requests write only):
+# token_file = /etc/keel-bridge/github-token
+# bot = <login of the token owner>
