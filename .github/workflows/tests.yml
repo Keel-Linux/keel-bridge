@@ -1,0 +1,16 @@
+# Light CI on GitHub-hosted runners, for pull requests on the GitHub mirror
+# (decision 0056). The full CI is .forgejo/workflows on git.pop.coop, with
+# the coverage gate of 95 percent.
+name: tests
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    uses: keel-linux/.github/.github/workflows/github-test-python.yml@main
+    with:
+      package: keelbridge

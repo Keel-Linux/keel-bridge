@@ -1,0 +1,14 @@
+# Light CI on GitHub-hosted runners, for pull requests on the GitHub mirror
+# (decision 0056). The full CI is .forgejo/workflows on git.pop.coop, and
+# .forgejo/workflows/security.yml has the notes on each job.
+name: security
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  security:
+    uses: keel-linux/.github/.github/workflows/github-security-scan.yml@main
