@@ -1,0 +1,16 @@
+# Coverage gate for keel-bridge: 95 percent, the bar for code the project
+# writes (decision 0003). The check is "tests / coverage". Raise only.
+# The tests use in-memory servers and local git repositories. No test
+# talks to GitHub or git.pop.coop, and no test needs a token.
+name: tests
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  tests:
+    runs-on: keel-host
+    uses: keel-linux/.github/.github/workflows/test-python.yml@main
+    with:
+      threshold: 95
+      package: keelbridge

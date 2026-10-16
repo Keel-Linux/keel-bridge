@@ -1,0 +1,19 @@
+[project]
+name = "keel-bridge"
+version = "0.1.0"
+description = "Sync issues and pull requests between GitHub and git.pop.coop (Forgejo)"
+requires-python = ">=3.11"
+license = { text = "GPL-3.0-or-later" }
+
+[project.optional-dependencies]
+app = ["PyJWT[crypto]"]
+
+[project.scripts]
+keel-bridge = "keelbridge.cli:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["keelbridge"]

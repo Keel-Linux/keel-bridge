@@ -1,0 +1,24 @@
+#!/bin/sh
+# github-app-convert CODE: trade the code of the App manifest flow for the
+# App id and its private key. Run it as root in the bridge container, so
+# the key never leaves it. It writes /etc/keel-bridge/github-app.pem and
+# /etc/keel-bridge/github-app-id (root, 0600) and prints only the id and
+# the slug of the App.
+set -eu
+code="${1:?usage: github-app-convert CODE}"
+umask 077
+out="$(mktemp)"
+trap 'rm -f "$out"' EXIT
+curl -sS --fail-with-body -X POST -H "Accept: application/vnd.github+json" \
+	"https://api.github.com/app-manifests/$code/conversions" -o "$out"
+python3 - "$out" <<'PY'
+import json, os, sys
+d = json.load(open(sys.argv[1]))
+os.makedirs("/etc/keel-bridge", mode=0o700, exist_ok=True)
+for name, value in (("github-app.pem", d["pem"]), ("github-app-id", str(d["id"]))):
+    path = "/etc/keel-bridge/" + name
+    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    with os.fdopen(fd, "w") as fh:
+        fh.write(value + "\n")
+print("app id", d["id"], "slug", d["slug"])
+PY

@@ -1,0 +1,10 @@
+[Unit]
+Description=keel-bridge every 2 minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitInactiveSec=2min
+RandomizedDelaySec=10s
+
+[Install]
+WantedBy=timers.target

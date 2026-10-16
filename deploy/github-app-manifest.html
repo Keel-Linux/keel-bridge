@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>keel-bridge GitHub App</title></head>
+<body>
+<h1>Create the keel-bridge GitHub App</h1>
+<p>An owner of the GitHub organization Keel-Linux opens this file in a
+browser that is signed in to GitHub, and pushes the button. GitHub shows
+the App settings. Push "Create GitHub App". GitHub then goes to
+git.pop.coop/Keel-Linux/keel-bridge with <code>?code=...</code> in the
+address. Give that code to the operator of the bridge. The code is valid
+for one hour.</p>
+<p>The App can write issues and pull requests, and read metadata. It
+cannot write code, workflows or settings. It has no webhook.</p>
+<form action="https://github.com/organizations/Keel-Linux/settings/apps/new?state=keel-bridge" method="post">
+<input type="hidden" name="manifest" value='{
+ "name": "keel-linux-bridge",
+ "url": "https://git.pop.coop/Keel-Linux/keel-bridge",
+ "description": "Syncs issues and pull requests between github.com/Keel-Linux and git.pop.coop/Keel-Linux (decision 0056).",
+ "redirect_url": "https://git.pop.coop/Keel-Linux/keel-bridge",
+ "hook_attributes": {"url": "https://git.pop.coop/Keel-Linux/keel-bridge", "active": false},
+ "public": false,
+ "default_permissions": {"issues": "write", "pull_requests": "write", "metadata": "read"},
+ "default_events": []
+}'>
+<button type="submit">Create the App on GitHub</button>
+</form>
+</body>
+</html>
