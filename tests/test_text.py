@@ -160,6 +160,8 @@ def test_closing_notes():
     closed = text.closed_elsewhere(FJ, "https://x", "r", "9")
     assert "closed on git.pop.coop" in closed
     assert text.has_marker(merged) and text.has_marker(closed)
+    via_main = text.merged_on_main("https://github.com/x/pull/4", "r", "pr4")
+    assert "main branch" in via_main and text.has_marker(via_main)
 
 
 def test_body_hash_is_stable_and_sensitive():

@@ -445,3 +445,14 @@ def test_closed_original_gets_a_closed_copy(env):
     n = env.gh.add(R, "x", state="closed")
     env.bridge.copy_item(R, "gh", env.gh.get_item(R, n))
     assert only_copy(env.fj)["state"] == "closed"
+
+
+def test_merge_through_main_closes_the_copy_with_a_merged_note(env):
+    n, link = bridged_pr(env)
+    env.gh.pulls[R][n].update(merged=True, state="closed")
+    env.cycle()
+    assert env.fj.pulls[R][link.fj]["state"] == "closed"
+    notes = [c["body"] for c in env.fj.comments_on(R, link.fj) if c["login"] == "keel-bridge"]
+    assert any("on the main branch now" in b for b in notes)
+    assert not any("was closed on GitHub" in b for b in notes)
+    assert env.store.link_by(R, "gh", n).done
