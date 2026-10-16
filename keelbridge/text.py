@@ -159,6 +159,13 @@ def merged_elsewhere(url, sha, repo):
             f"{marker('x', repo, 'merged')}")
 
 
+def merged_on_main(url, repo, ident):
+    return (f"The commits of this pull request are on the main branch now, and "
+            f"GitHub shows the original as merged: {url}\n"
+            f"A maintainer merged them through a pull request of this repository. "
+            f"The bridge closes this copy.\n\n{marker('x', repo, ident)}")
+
+
 def closed_elsewhere(side, url, repo, ident):
     return (f"The copy of this item was closed on {side.label}: {url}\n\n"
             f"{marker('x', repo, ident)}")

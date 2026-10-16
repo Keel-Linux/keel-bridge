@@ -294,11 +294,22 @@ class Bridge:
                                    text.closed_elsewhere(self.fj.side, fp.url, repo, f"pr{link.fj}"))
             self.gh.close_pull(repo, link.gh)
             self.finish_pull(repo, link)
+            log.info("%s: fj#%s closed, gh#%s closed", repo, link.fj, link.gh)
+        elif gp.merged and fp.state == "open":
+            # The commits reached main by another pull request (a maintainer
+            # pushed them into the repository for a trusted run), and the
+            # mirror made GitHub show the original as merged.
+            self.fj.create_comment(repo, link.fj,
+                                   text.merged_on_main(gp.url, repo, f"pr{link.gh}"))
+            self.fj.close_pull(repo, link.fj)
+            self.finish_pull(repo, link)
+            log.info("%s: gh#%s merged through main, fj#%s closed", repo, link.gh, link.fj)
         elif gp.state == "closed" and fp.state == "open":
             self.fj.create_comment(repo, link.fj,
                                    text.closed_elsewhere(self.gh.side, gp.url, repo, f"pr{link.gh}"))
             self.fj.close_pull(repo, link.fj)
             self.finish_pull(repo, link)
+            log.info("%s: gh#%s closed, fj#%s closed", repo, link.gh, link.fj)
         elif gp.state == "closed":
             self.finish_pull(repo, link)
         elif gp.head_sha != link.head:
